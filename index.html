@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concorde Auriga | Bhog Token</title>
+<style>
+  :root { color-scheme: light; --gold:#D4AF37; --deep:#6E2119; --ink:#54251E; --cream:#FFF9E9; --pale:#FFF2CC; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; font-family:Georgia,'Times New Roman',serif; background:#f7f0df; color:var(--ink); display:flex; align-items:center; justify-content:center; padding:24px 14px; }
+  .wrap { width:min(100%,520px); text-align:center; }
+  .thankyou { font:600 16px/1.5 system-ui,sans-serif; margin:0 0 16px; }
+  .thankyou strong { color:#78550b; }
+  .card { background:var(--cream); border:2px solid var(--gold); padding:24px 20px; position:relative; box-shadow:0 10px 28px #68451a18; }
+  .card:before { content:''; position:absolute; inset:7px; border:1px solid #D4AF3780; pointer-events:none; }
+  .brand { letter-spacing:.25em; font:600 13px system-ui,sans-serif; }
+  h1 { color:var(--deep); font-size:clamp(29px,7vw,42px); line-height:1.05; margin:8px 0 5px; }
+  .subtitle { color:#a67813; font:700 13px system-ui,sans-serif; letter-spacing:.17em; }
+  .rule { color:var(--gold); margin:18px 0; letter-spacing:.4em; }
+  .details { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--gold); border-radius:12px; overflow:hidden; background:#fff0c9; margin:20px 0; }
+  .detail { padding:16px 8px; }
+  .detail + .detail { border-left:1px solid var(--gold); }
+  .label { font:700 11px system-ui,sans-serif; letter-spacing:.08em; color:#91660d; text-transform:uppercase; }
+  .value { font:800 clamp(27px,7vw,40px)/1.15 system-ui,sans-serif; color:var(--deep); overflow-wrap:anywhere; margin-top:8px; }
+  .message { font:15px/1.5 system-ui,sans-serif; margin:16px 0 4px; }
+  .foot { color:#7d5a19; font:italic 15px/1.5 Georgia,serif; margin-top:20px; }
+  .actions { display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+  button { border:0; border-radius:9px; padding:13px 18px; font:700 14px system-ui,sans-serif; cursor:pointer; }
+  .primary { background:#8e6410; color:white; }
+  .secondary { background:#fff; color:#6b4c0d; border:1px solid #d9c17a; }
+  .hint { font:12px/1.5 system-ui,sans-serif; color:#6f6250; margin:12px 0 0; }
+  .notice { background:var(--pale); padding:10px 12px; margin-top:14px; font:12px/1.45 system-ui,sans-serif; }
+  @media print { body { background:white; padding:0; } .thankyou,.actions,.hint,.notice { display:none; } .card { box-shadow:none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="thankyou" id="thankyou">Thank you for registering for <strong>Concorde Auriga Durga Puja Bhog!</strong></p>
+  <section class="card" id="tokenCard" aria-label="Bhog collection token">
+    <div class="brand">CONCORDE AURIGA</div>
+    <h1>Durga Puja<br>Bhog Participation</h1>
+    <div class="subtitle">DIGITAL COLLECTION TOKEN</div>
+    <div class="rule">✦ ───── ❁ ───── ✦</div>
+    <div class="details">
+      <div class="detail"><div class="label">Block &amp; Flat No.</div><div class="value" id="apartment">A-101</div></div>
+      <div class="detail"><div class="label">Coupons to collect</div><div class="value" id="count">4</div></div>
+    </div>
+    <div class="message">Please show this token to the volunteers at the Bhog counter and collect the number of coupons shown above.</div>
+    <div class="foot">Thank you for being part of our Durga Puja celebrations!</div>
+  </section>
+  <div class="actions">
+    <button class="primary" id="downloadBtn" type="button">Download token as PNG</button>
+    <button class="secondary" id="printBtn" type="button">Print / Save as PDF</button>
+  </div>
+  <p class="hint">Save this image to your phone and show it at the Bhog collection counter.</p>
+  <div class="notice" id="demoNotice" hidden>Preview mode: sample details are shown. Connect Tally answer values in the redirect URL before sharing this page.</div>
+</main>
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  // Query parameter names expected: block, flat, coupons. Values are supplied by the Tally redirect.
+  const block = (params.get('block') || '').trim().toUpperCase();
+  const flat = (params.get('flat') || '').trim().toUpperCase();
+  const coupons = (params.get('coupons') || '').trim();
+  const isDemo = !(block || flat || coupons);
+  const apartment = [block, flat].filter(Boolean).join('-') || 'A-101';
+  const safeCount = /^([1-9]|10)$/.test(coupons) ? coupons : '4';
+  document.getElementById('apartment').textContent = apartment;
+  document.getElementById('count').textContent = safeCount;
+  document.getElementById('demoNotice').hidden = !isDemo;
+
+  document.getElementById('downloadBtn').addEventListener('click', function () {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080; canvas.height = 1350;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = '#FFF9E9'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 5; ctx.strokeRect(28, 28, W-56, H-56);
+    ctx.lineWidth = 2; ctx.strokeRect(43, 43, W-86, H-86);
+    ctx.fillStyle = '#6E2119'; ctx.textAlign = 'center';
+    ctx.font = '600 32px Arial'; ctx.fillText('C O N C O R D E   A U R I G A', W/2, 115);
+    ctx.font = 'bold 64px Georgia'; ctx.fillText('Durga Puja', W/2, 230);
+    ctx.font = 'bold 66px Georgia'; ctx.fillText('Bhog Participation', W/2, 310);
+    ctx.fillStyle = '#A67813'; ctx.font = 'bold 30px Arial'; ctx.fillText('DIGITAL COLLECTION TOKEN', W/2, 370);
+    ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(150,420); ctx.lineTo(930,420); ctx.stroke();
+    const boxX=105, boxY=490, boxW=870, boxH=300;
+    ctx.fillStyle='#FFF0C9'; ctx.strokeStyle='#D4AF37'; ctx.lineWidth=3;
+    roundRect(ctx,boxX,boxY,boxW,boxH,24,true,true);
+    ctx.beginPath(); ctx.moveTo(W/2,boxY+28); ctx.lineTo(W/2,boxY+boxH-28); ctx.stroke();
+    ctx.fillStyle='#91660D'; ctx.font='bold 24px Arial'; ctx.fillText('BLOCK & FLAT NO.',boxX+boxW*.25,boxY+75); ctx.fillText('COUPONS TO COLLECT',boxX+boxW*.75,boxY+75);
+    ctx.fillStyle='#6E2119'; ctx.font='bold 62px Arial'; fitText(ctx,apartment,boxX+boxW*.25,boxY+180,boxW*.44); ctx.fillText(safeCount,boxX+boxW*.75,boxY+180);
+    ctx.fillStyle='#54251E'; ctx.font='28px Arial'; wrapText(ctx,'Please show this token to the volunteers at the Bhog counter and collect the number of coupons shown above.',W/2,875,800,43);
+    ctx.fillStyle='#7D5A19'; ctx.font='italic 29px Georgia'; ctx.fillText('Thank you for being part of our',W/2,1040); ctx.fillText('Durga Puja celebrations!',W/2,1080);
+    ctx.fillStyle='#A67813'; ctx.font='bold 20px Arial'; ctx.fillText('CONCORDE AURIGA  •  DURGA PUJA BHOG',W/2,1195);
+    canvas.toBlob(function(blob){
+      if (!blob) { alert('Could not create the image. Please try again.'); return; }
+      const url=URL.createObjectURL(blob); const a=document.createElement('a');
+      a.href=url; a.download='Concorde-Auriga-Bhog-Token-'+apartment.replace(/[^A-Z0-9-]/g,'')+'.png';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+    },'image/png');
+  });
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  function roundRect(c,x,y,w,h,r,fill,stroke){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();if(fill)c.fill();if(stroke)c.stroke();}
+  function fitText(c,text,x,y,maxWidth){let size=62;c.font='bold '+size+'px Arial';while(c.measureText(text).width>maxWidth&&size>24){size-=2;c.font='bold '+size+'px Arial';}c.textAlign='center';c.fillText(text,x,y);}
+  function wrapText(c,text,x,y,maxWidth,lineHeight){const words=text.split(' ');let line='',lines=[];for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);lines.forEach((l,i)=>c.fillText(l,x,y+i*lineHeight));}
+})();
+</script>
+</body>
+</html>
